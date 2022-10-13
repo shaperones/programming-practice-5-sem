@@ -233,6 +233,9 @@ while True:
         print('Неверный ввод. См. пример ввода')
     except OpError:
         print('Неверно введена операция. См. доступные операции')
+    except EOFError:
+        print('Встречен EOF. Завершение работы')
+        break
     else:
         x, y = Complex(a1, b1), Complex(a2, b2)
         if op == '+':
