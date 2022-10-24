@@ -1,4 +1,6 @@
-""" Доработать связный список из Lesson_4 возможностью итерации. """
+""" Доработать связный список из предыдущих занятий, снабдив его
+возможностью сохранять данные в бинарный файл и восстанавливать из сохранения."""
+import pickle
 
 
 class Node:
@@ -132,25 +134,38 @@ class List:
             yield node
             node = node.get_prev()
 
+    def dump(self, file: str):  # запись в файл с произвольным названием
+        with open(file, "wb") as fi:
+            pickle.dump(self, fi)
+
+    def load(self, file: str):  # восстановление из файла с названием
+        try:
+            with open(file, "rb") as fi:
+                p = pickle.load(fi)
+            self.__dict__.update(p.__dict__)
+        except FileNotFoundError:
+            print('file not found. list stays unchanged')
+        finally:
+            return self
+
 
 A = List()
 for i in range(5):
     A.append(i)
 print(A)
-C = List()
 B = List(values=[5, 6, 7, 9])
 print(B)
-print(A + B)
+# восстановление из несуществующего файла
+B.load('A')
+# первое сохранение
+A.dump('A')
+A.load('A')
 print(A)
-print(B)
-print(A + C)
-print(C + A)
-print((A + B)[3])
-print(C)
-print(A.pop(0), A.pop(1), A.pop(2), A)
-for i in A:
-    print(i)
-for i in reversed(A):
-    print(i)
+# перезапись сохранения
+B.dump('A')
+A.load('A')
+print(A)
+
+
 
 
